@@ -1,0 +1,74 @@
+/* * 
+* common css
+* author: zhuhuishao
+* 主要功能: 实现全局通用样式抽取
+* */
+
+@charset "utf-8";
+
+html,
+body{
+	height: 100%;
+	font-family: 'PingFang SC','Microsoft YaHei',Helvetica,Arial,sans-serif; 
+	-webkit-overflow-scrolling: touch;
+	color: #282828;
+    -webkit-tap-highlight-color: transparent;
+    font-weight: normal;
+	background: #fafafa;
+	font-size: 0.3rem;
+	word-wrap: break-word;  
+	word-break: normal;
+}
+
+/* * 边距 * */
+* { 
+	margin:0;
+	padding:0; 
+}
+
+/* * img * */
+img { border:none; }
+
+/* * ul * */
+ul { padding: 0;
+	list-style-type: none;
+}
+
+/* * 浮动 * */
+p {
+	margin: 0;
+}
+
+input, button, textarea { 
+	font-family: 'PingFang SC','Microsoft YaHei',Helvetica,Arial,sans-serif; 
+	-webkit-appearance: none;
+}
+
+/* * 去除滚动条 * */
+::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    display: none;
+}
+::-webkit-search-cancel-button { 
+	display: none; 
+}
+
+::-webkit-input-placeholder { 
+    color: #ccc;  
+} 
+
+@media all and (min-width: 750px){
+    body{
+        width: 750px;
+        margin: 0 auto;
+    }
+}
+
+@media all and (max-width: 320px){
+    body{
+        width: 320px;
+        margin: 0 auto;
+        overflow-x: hidden;
+    }
+}
