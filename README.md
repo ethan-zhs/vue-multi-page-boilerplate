@@ -1,66 +1,118 @@
-## 大屏模块开发
-目的:仅维护组件以及页面布局配置,在容器中生成相应页面
-```
-├── containers      页面组件
-│   ├── touchtvchart    主要页面
-│   └── devchart    面向开发
-├── components      容器组件
-│   ├── BaseContainer   布局容器
-│   ├── BaseCharts  县级组件容器
-│   └── County      县级组件
-│   └── Media       短视频组件
-    └── AutoCounty  每个县可能存在多个大屏这里是各个县各个屏的组件
+
+# Build Setup
+
+``` bash
+# install dependencies
+npm install
+
+# serve with hot reload at localhost:3010
+npm start
+
+# build for production with minification
+npm run build
 ```
 
-1. touchtvchart
-主要页面,面向外部,仅作模块容器,取线上数据
-2. devchart
-面向开发,调整布局配置,取本地数据
-布局配置使用横竖块状切割,组件调整数据可通过配置data传达
+
+## Main Libiries
+
+* [vue 2](https://cn.vuejs.org/)
+* [vuex](https://vuex.vuejs.org/zh/guide/)
+* [vue-router](https://router.vuejs.org/zh/)
+* [vue-server-renderer](https://www.npmjs.com/package/vue-server-renderer)
+* [express](http://facebook.github.io/immutable-js/)
+* [axios](https://www.axios.com/)
+* [webpack 4](https://webpack.github.io/)
+
+---
+## 1. 工程目录
+> 
+```
+- build                     // webpack config
+- src
+  - client                  // 客户端
+    - client-entry.js
+  - server                  // 服务端
+    - template              // html模板
+    - server-entry.js
+    - server-prod.js        // server 打包文件
+  -view
+    - components            // 组件库
+      - ComA
+      - ComB
+    - mixin
+    - pages                 // 页面
+      - PageA
+      - PageB
+    - services              // 异步请求封装
+    - statics               // 静态资源
+    - store                 // 状态管理
+    - utils                 // 工具函数
+    - routes.js
+    - app.js
+    - App.vue
+- server.js
 
 ```
-// 布局配置(/store/dev.js)
-{
-    // 占位
-    col: 16.4,
-    // 名字标识
-    name: '内容排行榜',
-    // 组件名
-    componentType: 'ContentRate',
-    // 组件所取后台字段名
-    filed: 'Content_leaderboard',
-    data: {
-        // 自定义数据,字段不能与filed值重复
-        platform: {
-            name: '桔子新闻',
-            logoUrl: 'http://img2-cloud.itouchtv.cn/upload/20190506/7ejJ34AnbB1557113117.png'
+
+---
+## 2. CLIENt & SERVER
+> 
+```
+- client
+- server
+- view
+```
+
+---
+## 3. SEO
+> 
+```
+- headMixin
+```
+
+---
+## 4. Redis
+> 
+```
+const redisClient = redis.createClient({ host: ip, port: '6380' });
+
+redisClient.on('error', function (error) {
+    console.log(`error event - ${redisClient.host}:${redisClient.port} - ${error}`); 
+});
+
+function setRedisString(key, data) {
+    redisClient.set(key, data, function (setErr, setRes) { 
+        if (setErr) {
+            console.log('------- Set Redis Failure');
         }
-    }
+        if (setRes) {
+            console.log('------- Set Redis Success');
+        }
+    }); 
+    // 设置redis过期时间
+    redisClient.expire(key, 60 * 5);
+}
+
+function getRedisString(key) {
+    return new Promise((rs, rj) => {
+        redisClient.get(key, (err, res) => {
+            if (res) {
+                rs(res);
+            } else {
+                rj(err);
+            }
+        }); 
+    }); 
 }
 ```
 
-3. County
-组件内通过`translator.js`转换数据,视情况而设置
-新建组件需要在BaseCharts引入
-
-4. 组件输出
-类似AutoCounty多个屏的组件，在输出时需要加在当前县哪种屏的标识
-
+---
+## 5. Service Worker
+> 
 ```
-<!-- 例如：四会的大屏 -->
-export default {
-    ...addComponentPrefix(COMPONENTS, 'AutoCounty_Sihui_Big')
-};
-
-```
-
-```
-<!-- 内容排行榜 -->
-<ContentRate v-if="type==='ContentRate'" :screenData="option" />
-
-import ContentRate from 'Components/County/ContentRate/index.vue';
-
-components: {
-    'ContentRate': ContentRate
+// service worker
+if (window.location.protocol === 'https:' && navigator.serviceWorker && window.location.search.indexOf('sw=1') >= 0) {
+    console.log('service worker init');
+    navigator.serviceWorker.register('/service-worker.js');
 }
 ```
